@@ -117,10 +117,10 @@ public class SimpleWave implements Wave {
     @Override
     public void update() {
         addEach(velocities, this::vDiffAtt);
-        if (conservationRate != 1) {
-            scaleEach(velocities, conservationRate);
-        }
         addEach(positions, (x, y) -> get(velocities, x, y) * dt);
+        if (conservationRate != 1) {
+            scaleEach(positions, conservationRate);
+        }
     }
 
     public void randomize() {

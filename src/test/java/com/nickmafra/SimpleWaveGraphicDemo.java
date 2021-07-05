@@ -13,7 +13,7 @@ public class SimpleWaveGraphicDemo {
 
     private static final double ANGULAR_FREQ_SQUARED = 0.001;
     private static final double TIME_SCALE = 20.0;
-    public static final double CONSERVATION_RATE = 0.98;
+    public static final double CONSERVATION_RATE = 0.99;
 
     public static final double BUMP_AMPLITUDE = 10;
     public static final double BUMP_RADIUS = 8;
