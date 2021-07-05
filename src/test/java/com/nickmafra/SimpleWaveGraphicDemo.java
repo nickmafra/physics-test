@@ -1,28 +1,28 @@
 package com.nickmafra;
 
-import java.util.function.BiFunction;
+import com.nickmafra.gfx.MouseActionListenerAdapter;
+
+import java.awt.event.MouseEvent;
 
 public class SimpleWaveGraphicDemo {
 
     public static final double FPS = 60;
     public static final int SCALE = 1;
-    public static final int WIDTH = 512;
-    public static final int HEIGHT = 512;
-    public static final double COSCOS_ANGULAR_FREQUENCY_A = 2.0 * (2 * Math.PI);
-    public static final double COSCOS_ANGULAR_FREQUENCY_B = 0.5 * (2 * Math.PI);
-    public static final double COSCOS_ANGULAR_FREQUENCY = COSCOS_ANGULAR_FREQUENCY_A;
+    public static final int WIDTH = 256;
+    public static final int HEIGHT = 256;
 
     private static final double ANGULAR_FREQ_SQUARED = 0.001;
     private static final double TIME_SCALE = 20.0;
-    public static final double CONSERVATION_RATE = 1;
+    public static final double CONSERVATION_RATE = 0.98;
 
-    public static final BiFunction<Integer, Integer, Double> FUNCTION = SimpleWaveGraphicDemo::bumpEach;
+    public static final double BUMP_AMPLITUDE = 10;
+    public static final double BUMP_RADIUS = 8;
 
     public static void main(String[] args) {
         SimpleWave wave = new SimpleWave(WIDTH, HEIGHT, ANGULAR_FREQ_SQUARED, TIME_SCALE, CONSERVATION_RATE);
-        wave.addAtEachPosition(FUNCTION);
 
         WaveGraphic graphic = new WaveGraphic(wave, SCALE, FPS);
+        graphic.addMouseActionListener(new MouseActionListenerImpl(wave));
         graphic.start();
     }
 
@@ -35,12 +35,21 @@ public class SimpleWaveGraphicDemo {
         return bumpFunction((x - centerX) / radius, (y - centerY) / radius);
     }
 
-    public static double bumpEach(int x, int y) {
-        return 10 * bumpAround(x, y, WIDTH / 4, HEIGHT / 4, WIDTH / 32.0)
-                + 10 * bumpAround(x, y, WIDTH / 2, HEIGHT / 4, WIDTH / 32.0);
-    }
+    private static class MouseActionListenerImpl extends MouseActionListenerAdapter {
 
-    public static double coscosEach(int x, int y) {
-        return 1.0 * Math.cos(COSCOS_ANGULAR_FREQUENCY * x / WIDTH) * Math.cos(COSCOS_ANGULAR_FREQUENCY * y / HEIGHT);
+        private final SimpleWave wave;
+
+        private MouseActionListenerImpl(SimpleWave wave) {
+            this.wave = wave;
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            int mx = e.getX();
+            int my = e.getY();
+            System.out.println("Pressed at " + mx + ", " + my);
+
+            this.wave.addAtEachPosition((x, y) -> BUMP_AMPLITUDE * bumpAround(x, y, mx, my, BUMP_RADIUS));
+        }
     }
 }
