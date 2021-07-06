@@ -13,10 +13,10 @@ public class SimpleWaveGraphicDemo {
 
     private static final double ANGULAR_FREQ_SQUARED = 0.001;
     private static final double TIME_SCALE = 20.0;
-    public static final double CONSERVATION_RATE = 0.99;
+    public static final double CONSERVATION_RATE = 0.995;
 
     public static final double BUMP_AMPLITUDE = 10;
-    public static final double BUMP_RADIUS = 8;
+    public static final double BUMP_RADIUS = 4;
 
     public static void main(String[] args) {
         SimpleWave wave = new SimpleWave(WIDTH, HEIGHT, ANGULAR_FREQ_SQUARED, TIME_SCALE, CONSERVATION_RATE);

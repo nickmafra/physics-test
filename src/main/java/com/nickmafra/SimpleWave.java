@@ -3,6 +3,7 @@ package com.nickmafra;
 import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 public class SimpleWave implements Wave {
 
@@ -40,11 +41,11 @@ public class SimpleWave implements Wave {
     }
 
     private void iterate(BiConsumer<Integer, Integer> consumer) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                consumer.accept(x, y);
-            }
-        }
+        IntStream.range(0, height).parallel().forEach(y ->
+                IntStream.range(0, width).parallel().forEach(x ->
+                        consumer.accept(x, y)
+                )
+        );
     }
 
     private int getIndex(int x, int y) {
